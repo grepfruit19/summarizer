@@ -1,0 +1,2 @@
+# summarizer
+Automatic Summarization Program 
