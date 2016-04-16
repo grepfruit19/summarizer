@@ -16,3 +16,6 @@ Automatic Summarization Program
     - emigrants
     - immigrants
 
+3. List of "important verbs" ["pass", "confront", "stop", "take", 
+
+4. List of "ignorable words" ["and", "to", "of", "it", "she", 
