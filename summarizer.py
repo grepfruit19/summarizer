@@ -35,6 +35,36 @@ def latdirall(content):
     tfidf_feature_names = tf_vectorizer.get_feature_names()
     return top_topics(lda, tfidf_feature_names, 10)
 
+#Input: Unparsed sentence string
+#Processing: Runs a regex to check for presence of "number keywords", or numbers.
+#Output: Boolean True if keywords are found, else False.
+def number_check(sentence_array):
+    #check for keywords such as thousand, hundred, million, billion, trillion, percent
+    #Check for numbers that are formatted.
+    numbers = re.compile('[0-9]+|(hundred|thousand|million|billion|trillion)|(percent)')
+    check = re.search(numbers, sentence_array)
+    if check is not None:
+        print("True")
+        return True
+    else:
+        print("False")
+        return False
+
+#Input: Unparsed sentence string
+#Processing: Runs a regex to check for presence of months or days of the week, as well
+#as words like "Today", "Yesterday", "Tomorrow". Assumes proper capitalization,
+#given that these are edited articles.
+#Output: Boolean True if keywords are found, else False.
+def check_dates(sentence):
+    #months
+    #weekdays
+    #yesterday, today, tomorrow
+    month2 = re.compile('[Tt]oday|[Yy]esterday|[Tt]omorrow|Monday|Tuesday|Wednesday|Thursday|Friday|Saturday|Sunday|Jan(uary)?|Feb(ruary)?|Mar(ch)?|Apr(il)?|May|June|July|Aug(ust)?|Sept(ember)?|Oct(ober)?|Nov(ember)?|Dec(ember)?')
+    check = re.search(month2, sentence_array)
+    if check is not None:
+        return True
+    else:
+        return False
 
 with open(sys.argv[1], 'r') as input_file:
     fil = input_file.read()

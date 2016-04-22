@@ -2,15 +2,17 @@
 
 import re
 
-test_sentence = "The pope will arrive on June 24th, and he will bring with him a herd of cattle."
-
-def date_present(sentence_array):
-    months = ["January", "February", "March", "April", "May", "June", "July", "August",
-    "September", "October","November", "December", "Jan", "Feb", "Mar", "Apr", "Jun", "Jul",
-    "Aug", "Sept", "Oct", "Nov", "Dec"]
-    weekdays = ["Monday", "Tuesday", "Wednesday", "Thursday", "Friday", "Saturday", "Sunday"]
-    month = re.compile(?:Jan(?:uary)?|Feb(?:ruary)|Mar(?:ch)?|Apr(?:il)?|May|June|July|Aug(?:ust)?|Sept(?:ember)|Oct(?:ober)|Nov(?:ember))
-    #This isn't working, siqq
-    if test_sentence.search():
+def number_check(sentence_array):
+    #check for keywords such as thousand, hundred, million, billion, trillion, percent
+    #Check for numbers that are formatted.
+    numbers = re.compile('[0-9]+|(hundred|thousand|million|billion|trillion)|(percent)')
+    check = re.search(numbers, sentence_array)
+    if check is not None:
         print "True"
-    return True
+        return True
+    else:
+        print "False"
+        return False
+
+test_sentence = "A percent of people used to live here"
+number_check(test_sentence)
