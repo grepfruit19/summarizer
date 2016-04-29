@@ -11,7 +11,7 @@ def sentenceScore(sentence, wordlist, index):
     for word in sentence.split(' '):
         if word.lower() in wordlist:
             score += .2
-    #score += .2*(1/(index+1))
+    score += .2*(1/(index+1))
     return score
 
 def top_topics(model, feature_names, n_top_words):
@@ -77,6 +77,8 @@ with open(sys.argv[1], 'r') as input_file:
     paragraphs = fil.split('\n')
     i = 0
     ps = []
+    finalnumbersent = 0
+    previousnumsent = 0
     for i in range(0,len(paragraphs)):
         paragraph = sent_detector.tokenize(paragraphs[i].strip())
         currpara = {}
@@ -86,11 +88,15 @@ with open(sys.argv[1], 'r') as input_file:
             for word in sentence.split(' '):
                 currsent.append(word)
             currpara[sentence] = sentenceScore(sentence,importantwords,j)
-            if(currpara[sentence] >= 1):
+            if(currpara[sentence] >= .5):
                 print(sentence)
                 print("Score: ", currpara[sentence])
+                finalnumbersent += 1
+            previousnumsent += len(paragraph)
         ps.append(currpara)
         i += 1
+    print("Number of sentences of doc: ", previousnumsent)
+    print("Summary number of sentences: ", finalnumbersent)
     print("done") 
 
 #Everything below this line is stuff I've done, we can pick out what we want to keep later -Will
