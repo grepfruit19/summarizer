@@ -6,6 +6,52 @@ from sklearn.feature_extraction.text import TfidfVectorizer, CountVectorizer
 import numpy as np
 import nltk.data
 
+
+#Input: Unparsed sentence string
+#Processing: Runs a regex to check for presence of "number keywords", or numbers.
+#Output: Boolean True if keywords are found, else False.
+def number_check(sentence_array):
+    #check for keywords such as thousand, hundred, million, billion, trillion, percent
+    #Check for numbers that are formatted.
+    numbers = re.compile('[0-9]+|(hundred|thousand|million|billion|trillion)|(percent)')
+    check = re.search(numbers, sentence_array)
+    if check is not None:
+        return True
+    else:
+        return False
+
+def important_check(sentence_array):
+    important_words = re.compile('(important|interesting|major|valuable)')
+    check = re.search(important_words, sentence_array)
+    if check is not None:
+        return True
+    else:
+        return False
+
+def thesis_check(sentence_array):
+    thesis_words = re.compile('(however|evidence|experts|conclusion|estimated|despite|contrast|data)')
+    check = re.search(thesis_words, sentence_array)
+    if check is not None:
+        return True
+    else:
+        return False
+
+#Input: Unparsed sentence string
+#Processing: Runs a regex to check for presence of months or days of the week, as well
+#as words like "Today", "Yesterday", "Tomorrow". Assumes proper capitalization,
+#given that these are edited articles.
+#Output: Boolean True if keywords are found, else False.
+def check_dates(sentence):
+    #months
+    #weekdays
+    #yesterday, today, tomorrow
+    month2 = re.compile('[Ww]eek|[Mm]onth|[Yy]ear|[Dd]ay|[Tt]oday|[Yy]esterday|[Tt]omorrow|Monday|Tuesday|Wednesday|Thursday|Friday|Saturday|Sunday|Jan(uary)?|Feb(ruary)?|Mar(ch)?|Apr(il)?|May|June|July|Aug(ust)?|Sept(ember)?|Oct(ober)?|Nov(ember)?|Dec(ember)?')
+    check = re.search(month2, sentence_array)
+    if check is not None:
+        return True
+    else:
+        return False
+
 def sentenceScore(sentence, wordlist, index):
     score = 0
     for word in sentence.split(' '):
@@ -13,6 +59,15 @@ def sentenceScore(sentence, wordlist, index):
             score += .2
     if(index == 0):
         score += .3
+    if (number_check(sentence)==True):
+        score += .2
+    if (important_check(sentence)==True):
+        score += .2
+    if (thesis_check(sentence)==True):
+        score += .2
+    if (check_dates(sentence)==True):
+        score += .2
+
     return score
 
 def top_topics(model, feature_names, n_top_words):
@@ -40,36 +95,6 @@ def latdirall(content):
         wordlist += topic
     return wordlist
 
-#Input: Unparsed sentence string
-#Processing: Runs a regex to check for presence of "number keywords", or numbers.
-#Output: Boolean True if keywords are found, else False.
-def number_check(sentence_array):
-    #check for keywords such as thousand, hundred, million, billion, trillion, percent
-    #Check for numbers that are formatted.
-    numbers = re.compile('[0-9]+|(hundred|thousand|million|billion|trillion)|(percent)')
-    check = re.search(numbers, sentence_array)
-    if check is not None:
-        print("True")
-        return True
-    else:
-        print("False")
-        return False
-
-#Input: Unparsed sentence string
-#Processing: Runs a regex to check for presence of months or days of the week, as well
-#as words like "Today", "Yesterday", "Tomorrow". Assumes proper capitalization,
-#given that these are edited articles.
-#Output: Boolean True if keywords are found, else False.
-def check_dates(sentence):
-    #months
-    #weekdays
-    #yesterday, today, tomorrow
-    month2 = re.compile('[Ww]eek|[Mm]onth|[Yy]ear|[Dd]ay|[Tt]oday|[Yy]esterday|[Tt]omorrow|Monday|Tuesday|Wednesday|Thursday|Friday|Saturday|Sunday|Jan(uary)?|Feb(ruary)?|Mar(ch)?|Apr(il)?|May|June|July|Aug(ust)?|Sept(ember)?|Oct(ober)?|Nov(ember)?|Dec(ember)?')
-    check = re.search(month2, sentence_array)
-    if check is not None:
-        return True
-    else:
-        return False
 
 def getScore(item):
     return item[1]
