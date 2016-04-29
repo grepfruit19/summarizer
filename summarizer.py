@@ -10,27 +10,27 @@ import nltk.data
 #Input: Unparsed sentence string
 #Processing: Runs a regex to check for presence of "number keywords", or numbers.
 #Output: Boolean True if keywords are found, else False.
-def number_check(sentence_array):
+def number_check(sentence):
     #check for keywords such as thousand, hundred, million, billion, trillion, percent
     #Check for numbers that are formatted.
     numbers = re.compile('[0-9]+|(hundred|thousand|million|billion|trillion)|(percent)')
-    check = re.search(numbers, sentence_array)
+    check = re.search(numbers, sentence)
     if check is not None:
         return True
     else:
         return False
 
-def important_check(sentence_array):
+def important_check(sentence):
     important_words = re.compile('(important|interesting|major|valuable)')
-    check = re.search(important_words, sentence_array)
+    check = re.search(important_words, sentence)
     if check is not None:
         return True
     else:
         return False
 
-def thesis_check(sentence_array):
+def thesis_check(sentence):
     thesis_words = re.compile('(however|evidence|experts|conclusion|estimated|despite|contrast|data)')
-    check = re.search(thesis_words, sentence_array)
+    check = re.search(thesis_words, sentence)
     if check is not None:
         return True
     else:
@@ -46,7 +46,7 @@ def check_dates(sentence):
     #weekdays
     #yesterday, today, tomorrow
     month2 = re.compile('[Ww]eek|[Mm]onth|[Yy]ear|[Dd]ay|[Tt]oday|[Yy]esterday|[Tt]omorrow|Monday|Tuesday|Wednesday|Thursday|Friday|Saturday|Sunday|Jan(uary)?|Feb(ruary)?|Mar(ch)?|Apr(il)?|May|June|July|Aug(ust)?|Sept(ember)?|Oct(ober)?|Nov(ember)?|Dec(ember)?')
-    check = re.search(month2, sentence_array)
+    check = re.search(month2, sentence)
     if check is not None:
         return True
     else:
@@ -60,13 +60,13 @@ def sentenceScore(sentence, wordlist, index):
     if(index == 0):
         score += .3
     if (number_check(sentence)==True):
-        score += .2
+        score += .1
     if (important_check(sentence)==True):
-        score += .2
+        score += .1
     if (thesis_check(sentence)==True):
-        score += .2
+        score += .1
     if (check_dates(sentence)==True):
-        score += .2
+        score += .1
 
     return score
 
@@ -124,11 +124,6 @@ with open(sys.argv[1], 'r') as input_file:
             sentind += 1
         previousnumsent += len(paragraph)
         i += 1
-<<<<<<< HEAD
-    print("Number of sentences of doc: ", previousnumsent)
-    print("Summary number of sentences: ", finalnumbersent)
-    print("done")
-=======
     scoresorted = sorted(sentences, key=getScore, reverse=True)[:numsentences]
     indexsorted = sorted(scoresorted, key=getInd)
     outputsentences = [indexsorted[i][0] for i in range(0,len(indexsorted))]
@@ -137,7 +132,6 @@ with open(sys.argv[1], 'r') as input_file:
         print("\n")
     print("Number of sentences of original document: ", previousnumsent)
     print("dunski")
->>>>>>> f923ff2fb4f0043d82433da48e43cc02e554e512
 
 #Everything below this line is stuff I've done, we can pick out what we want to keep later -Will
 
