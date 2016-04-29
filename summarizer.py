@@ -11,7 +11,8 @@ def sentenceScore(sentence, wordlist, index):
     for word in sentence.split(' '):
         if word.lower() in wordlist:
             score += .2
-    score += .2*(1/(index+1))
+    if(index == 0):
+        score += .3
     return score
 
 def top_topics(model, feature_names, n_top_words):
@@ -70,34 +71,42 @@ def check_dates(sentence):
     else:
         return False
 
+def getScore(item):
+    return item[1]
+
+def getInd(item):
+    return item[2]
+
 with open(sys.argv[1], 'r') as input_file:
     fil = input_file.read()
+    numsentences = int(sys.argv[2])
     sent_detector = nltk.data.load('tokenizers/punkt/english.pickle')
     importantwords = latdirall(fil.split('\n'))
     paragraphs = fil.split('\n')
     i = 0
-    ps = []
-    finalnumbersent = 0
     previousnumsent = 0
+    sentences = []
+    sentind = 0
+    sentencescores = {}
     for i in range(0,len(paragraphs)):
         paragraph = sent_detector.tokenize(paragraphs[i].strip())
-        currpara = {}
         for j in range(0,len(paragraph)):
             currsent = []
             sentence = paragraph[j]
             for word in sentence.split(' '):
                 currsent.append(word)
-            currpara[sentence] = sentenceScore(sentence,importantwords,j)
-            if(currpara[sentence] >= .5):
-                print(sentence)
-                print("Score: ", currpara[sentence])
-                finalnumbersent += 1
-            previousnumsent += len(paragraph)
-        ps.append(currpara)
+            sentences.append([sentence, sentenceScore(sentence,importantwords,j), sentind])
+            sentind += 1
+        previousnumsent += len(paragraph)
         i += 1
-    print("Number of sentences of doc: ", previousnumsent)
-    print("Summary number of sentences: ", finalnumbersent)
-    print("done") 
+    scoresorted = sorted(sentences, key=getScore, reverse=True)[:numsentences]
+    indexsorted = sorted(scoresorted, key=getInd)
+    outputsentences = [indexsorted[i][0] for i in range(0,len(indexsorted))]
+    for sentence in outputsentences:
+        print(sentence)
+        print("\n")
+    print("Number of sentences of original document: ", previousnumsent)
+    print("dunski") 
 
 #Everything below this line is stuff I've done, we can pick out what we want to keep later -Will
 
