@@ -27,7 +27,7 @@ def top_topics(model, feature_names, n_top_words):
     return topics
 
 def latdirall(content):
-    lda = LatentDirichletAllocation(n_topics=5) 
+    lda = LatentDirichletAllocation(n_topics=5)
     tf_vectorizer = TfidfVectorizer(max_df=0.95, min_df=2,
                                 stop_words='english')
     tf = tf_vectorizer.fit_transform(content)
@@ -39,6 +39,11 @@ def latdirall(content):
         wordlist += topic
     return wordlist
 
+def important_check(sentence_array):
+    important_words = re.compile('(important|interesting|major|valuable)')
+
+def thesis_check(sentence_array):
+    thesis_words = re.compile('(however|evidence|experts|conclusion|estimated|despite|contrast|data)')
 #Input: Unparsed sentence string
 #Processing: Runs a regex to check for presence of "number keywords", or numbers.
 #Output: Boolean True if keywords are found, else False.
@@ -63,7 +68,7 @@ def check_dates(sentence):
     #months
     #weekdays
     #yesterday, today, tomorrow
-    month2 = re.compile('[Tt]oday|[Yy]esterday|[Tt]omorrow|Monday|Tuesday|Wednesday|Thursday|Friday|Saturday|Sunday|Jan(uary)?|Feb(ruary)?|Mar(ch)?|Apr(il)?|May|June|July|Aug(ust)?|Sept(ember)?|Oct(ober)?|Nov(ember)?|Dec(ember)?')
+    month2 = re.compile('[Ww]eek|[Mm]onth|[Yy]ear|[Dd]ay|[Tt]oday|[Yy]esterday|[Tt]omorrow|Monday|Tuesday|Wednesday|Thursday|Friday|Saturday|Sunday|Jan(uary)?|Feb(ruary)?|Mar(ch)?|Apr(il)?|May|June|July|Aug(ust)?|Sept(ember)?|Oct(ober)?|Nov(ember)?|Dec(ember)?')
     check = re.search(month2, sentence_array)
     if check is not None:
         return True
@@ -97,7 +102,7 @@ with open(sys.argv[1], 'r') as input_file:
         i += 1
     print("Number of sentences of doc: ", previousnumsent)
     print("Summary number of sentences: ", finalnumbersent)
-    print("done") 
+    print("done")
 
 #Everything below this line is stuff I've done, we can pick out what we want to keep later -Will
 
@@ -118,4 +123,3 @@ def rank(sentence):
     output = 0
 
     return output
-
