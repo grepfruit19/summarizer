@@ -9,7 +9,7 @@ import nltk.data
 def sentenceScore(sentence, wordlist, index):
     score = 0
     for word in sentence.split(' '):
-        if word in wordlist:
+        if word.lower() in wordlist:
             score += .2
     #score += .2*(1/(index+1))
     return score
@@ -33,7 +33,11 @@ def latdirall(content):
     tf = tf_vectorizer.fit_transform(content)
     lolz = lda.fit_transform(tf)
     tfidf_feature_names = tf_vectorizer.get_feature_names()
-    return top_topics(lda, tfidf_feature_names, 10)
+    tops = top_topics(lda, tfidf_feature_names, 10)
+    wordlist = []
+    for topic in tops:
+        wordlist += topic
+    return wordlist
 
 #Input: Unparsed sentence string
 #Processing: Runs a regex to check for presence of "number keywords", or numbers.
@@ -82,12 +86,12 @@ with open(sys.argv[1], 'r') as input_file:
             for word in sentence.split(' '):
                 currsent.append(word)
             currpara[sentence] = sentenceScore(sentence,importantwords,j)
-            if(currpara[sentence] > 0):
+            if(currpara[sentence] >= 1):
                 print(sentence)
-                print(currpara[sentence])
+                print("Score: ", currpara[sentence])
         ps.append(currpara)
         i += 1
-    
+    print("done") 
 
 #Everything below this line is stuff I've done, we can pick out what we want to keep later -Will
 
